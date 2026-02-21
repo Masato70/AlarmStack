@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">AlarmStack</string>
+    
+    <!-- ボタン・アクション -->
+    <string name="set">Set</string>
+    <string name="cancel">Cancel</string>
+    <string name="stop">Stop</string>
+    <string name="delete">Delete</string>
+    <string name="back">Back</string>
+    <string name="grant">Grant</string>
+    <string name="open_settings">Open Settings</string>
+    
+    <!-- アラーム関連 -->
+    <string name="alarm">Alarm</string>
+    <string name="add_alarm">Add alarm</string>
+    <string name="add_time">Add time</string>
+    <string name="select_time">Select time</string>
+    <string name="tap_to_stop_alarm">Tap to stop alarm</string>
+    <string name="no_alarms">No alarms set.\nTap + to add one.</string>
+
+    <string name="vibration_only">Vibration only</string>
+    <string name="sound">Sound</string>
+    <string name="add_label">Add label</string>
+    <string name="label">Label</string>
+    <string name="label_placeholder">e.g. Take medicine, Take out trash</string>
+    <string name="save">Save</string>
+    <string name="delete_label">Delete</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+    <string name="remaining_hours_minutes">%1$d hr %2$d min later</string>
+    <string name="remaining_hours">%d hr later</string>
+    <string name="remaining_minutes">%d min later</string>
+    <string name="remaining_soon">Soon</string>
+    <string name="next_alarm_description">%1$s (%2$s)</string>
+
+    <string name="snooze_after_minutes">Snooze for %d minutes</string>
+
+    <string name="alarm_deleted">Alarm deleted</string>
+    <string name="undo">Undo</string>
+
+    <!-- 権限関連 -->
+    <string name="permission_required_title">Permission Required</string>
+    <string name="alarm_permission_message">This app needs permission to schedule exact alarms. Please allow this permission in settings.</string>
+    <string name="notification_permission_message">This app needs permission to show alarm notifications. Please grant notification permission.</string>
+
+    <string name="notification_permission_warning">Notifications are not allowed. You may not be able to stop alarms while in use.</string>
+</resources>

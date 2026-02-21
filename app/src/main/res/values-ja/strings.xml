@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">まとめてアラーム</string>
+    
+    <!-- ボタン・アクション -->
+    <string name="set">セット</string>
+    <string name="cancel">キャンセル</string>
+    <string name="stop">停止</string>
+    <string name="delete">削除</string>
+    <string name="back">戻る</string>
+    <string name="grant">許可する</string>
+    <string name="open_settings">設定を開く</string>
+    
+    <!-- アラーム関連 -->
+    <string name="alarm">アラーム</string>
+    <string name="add_alarm">アラームを追加</string>
+    <string name="add_time">時間を追加</string>
+    <string name="select_time">時間を選択</string>
+    <string name="tap_to_stop_alarm">タップしてアラームを停止</string>
+    <string name="no_alarms">アラームがありません。\n+をタップして追加してください。</string>
+
+
+    <string name="vibration_only">バイブのみ</string>
+    <string name="sound">サウンド</string>
+    <string name="add_label">ラベルを追加</string>
+    <string name="label">ラベル</string>
+    <string name="label_placeholder">例: 薬を飲む、ゴミ出し</string>
+    <string name="save">保存</string>
+    <string name="delete_label">削除</string>
+    <string name="today">今日</string>
+    <string name="tomorrow">明日</string>
+    <string name="remaining_hours_minutes">%1$d時間%2$d分後</string>
+    <string name="remaining_hours">%d時間後</string>
+    <string name="remaining_minutes">%d分後</string>
+    <string name="remaining_soon">まもなく</string>
+    <string name="next_alarm_description">%1$s (%2$s)</string>
+
+    <string name="snooze_after_minutes">%d分後にスヌーズ</string>
+
+    <string name="alarm_deleted">アラームを削除しました</string>
+    <string name="undo">元に戻す</string>
+
+    <!-- 権限関連 -->
+    <string name="permission_required_title">権限が必要です</string>
+    <string name="alarm_permission_message">正確なアラームを設定するための権限が必要です。設定から許可してください。</string>
+    <string name="notification_permission_message">アラーム通知を表示するための権限が必要です。通知の権限を許可してください。</string>
+
+    <string name="notification_permission_warning">通知が許可されていません。使用中にアラームを停止できない場合があります</string>
+</resources>
