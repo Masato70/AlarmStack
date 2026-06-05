@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">모아 알람</string>
+
+    <!-- Buttons and actions -->
+    <string name="set">설정</string>
+    <string name="cancel">취소</string>
+    <string name="stop">정지</string>
+    <string name="delete">삭제</string>
+    <string name="back">뒤로</string>
+    <string name="grant">허용</string>
+    <string name="open_settings">설정 열기</string>
+
+    <!-- Alarm -->
+    <string name="alarm">알람</string>
+    <string name="add_alarm">알람 추가</string>
+    <string name="add_time">시간 추가</string>
+    <string name="select_time">시간 선택</string>
+    <string name="tap_to_stop_alarm">탭하여 알람 정지</string>
+    <string name="no_alarms">설정된 알람이 없습니다.\n+를 탭하여 추가하세요.</string>
+
+    <string name="vibration_only">진동만</string>
+    <string name="sound">소리</string>
+    <string name="add_label">라벨 추가</string>
+    <string name="label">라벨</string>
+    <string name="label_placeholder">예: 약 먹기, 쓰레기 버리기</string>
+    <string name="save">저장</string>
+    <string name="delete_label">삭제</string>
+    <string name="today">오늘</string>
+    <string name="tomorrow">내일</string>
+    <string name="remaining_hours_minutes">%1$d시간 %2$d분 후</string>
+    <string name="remaining_hours">%d시간 후</string>
+    <string name="remaining_minutes">%d분 후</string>
+    <string name="remaining_soon">곧</string>
+    <string name="next_alarm_description">%1$s (%2$s)</string>
+
+    <string name="snooze_after_minutes">%d분 후 다시 알림</string>
+
+    <string name="alarm_deleted">알람을 삭제했습니다</string>
+    <string name="undo">실행 취소</string>
+
+    <!-- Permissions -->
+    <string name="permission_required_title">권한이 필요합니다</string>
+    <string name="alarm_permission_message">정확한 알람을 예약하려면 권한이 필요합니다. 설정에서 이 권한을 허용해 주세요.</string>
+    <string name="notification_permission_message">알람 알림을 표시하려면 권한이 필요합니다. 알림 권한을 허용해 주세요.</string>
+
+    <string name="notification_permission_warning">알림이 허용되지 않았습니다. 사용 중 알람을 정지하지 못할 수 있습니다.</string>
+</resources>

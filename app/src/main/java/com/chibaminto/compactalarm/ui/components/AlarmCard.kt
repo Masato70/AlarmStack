@@ -1,6 +1,7 @@
 package com.chibaminto.compactalarm.ui.components
 
 import android.content.Context
+import android.view.HapticFeedbackConstants
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -12,6 +13,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -60,6 +62,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -90,6 +93,7 @@ fun AlarmCard(
     modifier: Modifier = Modifier
 ) {
     val context = LocalContext.current
+    val view = LocalView.current
     var showLabelDialog by remember { mutableStateOf(false) }
 
     SwipeToDeleteContainer(
@@ -185,7 +189,10 @@ fun AlarmCard(
                         ) {
                             Switch(
                                 checked = cardData.isEnabled,
-                                onCheckedChange = { onToggleEnabled(cardData.id, it) },
+                                onCheckedChange = {
+                                    view.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+                                    onToggleEnabled(cardData.id, it)
+                                },
                                 colors = SwitchDefaults.colors(
                                     checkedThumbColor = Color(0xFF00E5FF),
                                     checkedTrackColor = Color(0xFF00E5FF).copy(alpha = 0.5f),
@@ -415,87 +422,116 @@ private fun SwipeToDeleteContainer(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
+    val view = LocalView.current
+    val density = LocalDensity.current
     var offsetX by remember { mutableFloatStateOf(0f) }
-    val deleteThreshold = with(LocalDensity.current) { 250.dp.toPx() }
     var isDeleting by remember { mutableStateOf(false) }
+    var thresholdHapticSent by remember { mutableStateOf(false) }
 
-    val animatedOffset by animateFloatAsState(
-        targetValue = if (isDeleting) {
-            if (offsetX < 0) -deleteThreshold * 2 else deleteThreshold * 2
-        } else offsetX,
-        label = "swipe_offset",
-        finishedListener = { if (isDeleting) onDelete() }
-    )
+    BoxWithConstraints(modifier = modifier) {
+        val deleteThreshold = with(density) {
+            (maxWidth.toPx() * 0.62f)
+                .coerceIn(240.dp.toPx(), 320.dp.toPx())
+        }
+        val maxSwipeOffset = deleteThreshold * 1.25f
+        val hasReachedDeleteThreshold = abs(offsetX) >= deleteThreshold
 
-    val backgroundColor by animateColorAsState(
-        targetValue = if (abs(offsetX) > deleteThreshold / 2) Color(0xFFEF5350)
-        else Color(0xFFEF5350).copy(alpha = 0.3f),
-        label = "background_color"
-    )
+        val animatedOffset by animateFloatAsState(
+            targetValue = if (isDeleting) {
+                if (offsetX < 0) -deleteThreshold * 2 else deleteThreshold * 2
+            } else offsetX,
+            label = "swipe_offset",
+            finishedListener = { if (isDeleting) onDelete() }
+        )
 
-    Box(modifier = modifier) {
-        if (offsetX < 0) {
-            Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .background(backgroundColor, shape = RoundedCornerShape(16.dp))
-                    .padding(end = 24.dp),
-                contentAlignment = Alignment.CenterEnd
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        Icons.Default.Delete, stringResource(R.string.delete),
-                        tint = Color.White, modifier = Modifier.size(32.dp)
-                    )
-                    Text(
-                        stringResource(R.string.delete_label),
-                        color = Color.White,
-                        style = MaterialTheme.typography.labelSmall
-                    )
+        val backgroundColor by animateColorAsState(
+            targetValue = when {
+                hasReachedDeleteThreshold -> Color(0xFFE53935)
+                abs(offsetX) > deleteThreshold * 0.45f -> Color(0xFFEF5350)
+                else -> Color(0xFFEF5350).copy(alpha = 0.28f)
+            },
+            label = "background_color"
+        )
+
+        Box {
+            if (offsetX < 0) {
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .background(backgroundColor, shape = RoundedCornerShape(16.dp))
+                        .padding(end = 24.dp),
+                    contentAlignment = Alignment.CenterEnd
+                ) {
+                    DeleteBackgroundContent(isArmed = hasReachedDeleteThreshold)
                 }
             }
-        }
-        if (offsetX > 0) {
-            Box(
-                modifier = Modifier
-                    .matchParentSize()
-                    .background(backgroundColor, shape = RoundedCornerShape(16.dp))
-                    .padding(start = 24.dp),
-                contentAlignment = Alignment.CenterStart
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        Icons.Default.Delete, stringResource(R.string.delete),
-                        tint = Color.White, modifier = Modifier.size(32.dp)
-                    )
-                    Text(
-                        stringResource(R.string.delete_label),
-                        color = Color.White,
-                        style = MaterialTheme.typography.labelSmall
-                    )
+            if (offsetX > 0) {
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .background(backgroundColor, shape = RoundedCornerShape(16.dp))
+                        .padding(start = 24.dp),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    DeleteBackgroundContent(isArmed = hasReachedDeleteThreshold)
                 }
             }
-        }
 
-        Box(
-            modifier = Modifier
-                .offset { IntOffset(animatedOffset.roundToInt(), 0) }
-                .pointerInput(Unit) {
-                    detectHorizontalDragGestures(
-                        onDragEnd = {
-                            if (abs(offsetX) > deleteThreshold) isDeleting = true
-                            else offsetX = 0f
-                        },
-                        onDragCancel = { offsetX = 0f },
-                        onHorizontalDrag = { _, dragAmount ->
-                            offsetX = (offsetX + dragAmount)
-                                .coerceIn(-deleteThreshold * 1.5f, deleteThreshold * 1.5f)
-                        }
-                    )
-                }
-        ) {
-            content()
+            Box(
+                modifier = Modifier
+                    .offset { IntOffset(animatedOffset.roundToInt(), 0) }
+                    .pointerInput(Unit) {
+                        detectHorizontalDragGestures(
+                            onDragEnd = {
+                                if (abs(offsetX) >= deleteThreshold) {
+                                    view.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK)
+                                    isDeleting = true
+                                } else {
+                                    offsetX = 0f
+                                    thresholdHapticSent = false
+                                }
+                            },
+                            onDragCancel = {
+                                offsetX = 0f
+                                thresholdHapticSent = false
+                            },
+                            onHorizontalDrag = { _, dragAmount ->
+                                val nextOffset = (offsetX + dragAmount)
+                                    .coerceIn(-maxSwipeOffset, maxSwipeOffset)
+                                offsetX = nextOffset
+
+                                if (!thresholdHapticSent && abs(nextOffset) >= deleteThreshold) {
+                                    view.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+                                    thresholdHapticSent = true
+                                }
+                            }
+                        )
+                    }
+            ) {
+                content()
+            }
         }
+    }
+}
+
+@Composable
+private fun DeleteBackgroundContent(isArmed: Boolean) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Icon(
+            Icons.Default.Delete,
+            contentDescription = stringResource(R.string.delete),
+            tint = Color.White,
+            modifier = Modifier.size(if (isArmed) 36.dp else 30.dp)
+        )
+        Text(
+            stringResource(R.string.delete_label),
+            color = Color.White,
+            style = if (isArmed) {
+                MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.Bold)
+            } else {
+                MaterialTheme.typography.labelSmall
+            }
+        )
     }
 }
 
@@ -509,6 +545,7 @@ private fun ChildAlarmItem(
     onEditTime: (String, LocalTime) -> Unit
 ) {
     val context = LocalContext.current
+    val view = LocalView.current
 
     SwipeToDeleteContainer(
         onDelete = { onDelete(cardData.id) },
@@ -561,7 +598,10 @@ private fun ChildAlarmItem(
                 ) {
                     Switch(
                         checked = cardData.isEnabled,
-                        onCheckedChange = { onToggleEnabled(cardData.id, it) },
+                        onCheckedChange = {
+                            view.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
+                            onToggleEnabled(cardData.id, it)
+                        },
                         colors = SwitchDefaults.colors(
                             checkedThumbColor = Color(0xFF00E5FF),
                             checkedTrackColor = Color(0xFF00E5FF).copy(alpha = 0.5f),
