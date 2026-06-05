@@ -19,26 +19,13 @@
 - **DI**: Hilt
 - **データ永続化**: DataStore Preferences
 - **最小SDK**: 26 (Android 8.0)
-- **ターゲットSDK**: 34 (Android 14)
+- **ターゲットSDK**: 35 (Android 14)
 
 ## ビルド要件
 
 - Android Studio Hedgehog (2023.1.1) 以降
 - JDK 17
 - Gradle 8.5
-
-## セットアップ
-
-1. リポジトリをクローン
-```bash
-git clone https://github.com/yourusername/compact-alarm.git
-```
-
-2. Android Studioでプロジェクトを開く
-
-3. Gradleの同期を実行
-
-4. デバイスまたはエミュレータでアプリを実行
 
 ## アプリの使い方
 
